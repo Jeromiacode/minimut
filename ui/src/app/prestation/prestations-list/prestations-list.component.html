@@ -1,0 +1,40 @@
+<p-toast key="deleteSuccess"></p-toast>
+<p-toast key="deleteError"></p-toast>
+<p-table class="prestation-table"
+         styleClass="p-datatable-striped"
+         [value]="prestations"
+         #prestationTable>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Prestation code</th>
+      <th>Name/description</th>
+      <th>Start date</th>
+      <th>End code</th>
+      <th>Price</th>
+      <th>Category</th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-prestation>
+    <tr>
+      <td>{{prestation?.code}}</td>
+      <td>{{prestation?.description}}</td>
+      <td>{{prestation?.startDate|date: 'dd/MM/yyyy'}}</td>
+      <td>{{prestation?.endDate|date: 'dd/MM/yyyy'}}</td>
+      <td>{{prestation?.price}}</td>
+      <td>{{prestation?.category.toLowerCase()}}</td>
+      <td class="pi-icon delete-btn">
+        <button pButton
+                class="prestation-delete-button"
+                icon="pi pi-times"
+                (click)="$event.stopPropagation(); deletePrestation(prestation)"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="5" (click)="clear(prestationTable)">No prestation found !</td>
+    </tr>
+  </ng-template>
+</p-table>
+<p-confirmDialog></p-confirmDialog>

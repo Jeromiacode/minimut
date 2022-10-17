@@ -1,0 +1,78 @@
+<p-toast key="deleteSuccess"></p-toast>
+<p-toast key="deleteError"></p-toast>
+<p-table class="affiliate-table"
+         styleClass="p-datatable-striped"
+         [value]="affiliates"
+         #affiliateTable>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Code</th>
+      <th>National number</th>
+      <th pSortableColumn="firstName">
+        <span class="affiliate-table-column-filter">
+          <p-sortIcon field="firstName"></p-sortIcon>First name
+          <p-columnFilter type="text" field="firstName" display="menu"></p-columnFilter>
+        </span>
+      </th>
+      <th pSortableColumn="lastName">
+        <span class="affiliate-table-column-filter">
+          <p-sortIcon field="lastName"></p-sortIcon>Last name
+          <p-columnFilter type="text" field="lastName" display="menu"></p-columnFilter>
+        </span>
+      </th>
+      <th>Email</th>
+      <th>Phone number</th>
+      <th>Gender</th>
+      <th>Birthdate</th>
+      <th>Street</th>
+      <th>Street n°</th>
+      <th pSortableColumn="addresses.0.postalCode">
+        <span class="affiliate-table-column-filter">
+          <p-sortIcon field="addresses.0.postalCode"></p-sortIcon>Postal code
+          <p-columnFilter type="text" field="addresses.0.postalCode" display="menu"></p-columnFilter>
+        </span>
+      </th>
+      <th pSortableColumn="addresses.0.city">
+        <span class="affiliate-table-column-filter">
+          <p-sortIcon field="addresses.0.city"></p-sortIcon>City
+          <p-columnFilter type="text" field="addresses.0.city" display="menu"></p-columnFilter>
+        </span>
+      </th>
+      <th>Date of settlement</th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-affiliate>
+    <tr [pSelectableRow]="affiliate" (click)="navigateToAffiliateDetails(affiliate)">
+      <td>{{affiliate?.code}}</td>
+      <td>{{affiliate?.nationalNumber}}</td>
+      <td>{{affiliate?.firstName}}</td>
+      <td>{{affiliate?.lastName}}</td>
+      <td>{{affiliate?.email}}</td>
+      <td>{{affiliate?.phoneNumber}}</td>
+      <td>{{affiliate?.gender?.toLowerCase()}}</td>
+      <td>{{affiliate?.birthdate}}</td>
+      <td>{{affiliate.addresses[0]?.street}}</td>
+      <td>{{affiliate.addresses[0]?.streetNumber}}</td>
+      <td>{{affiliate.addresses[0]?.postalCode}}</td>
+      <td>{{affiliate.addresses[0]?.city}}</td>
+      <td>{{affiliate.addresses[0]?.moveInDate}}</td>
+      <td class="pi-icon delete-btn">
+        <button pButton
+                class="update-affiliate-button"
+                icon="pi pi-pencil"
+                (click)="$event.stopPropagation(); navigateToUpdateForm(affiliate)"></button>
+        <button pButton
+                lass="affiliate-delete-button update-btn"
+                icon="pi pi-times"
+                (click)="$event.stopPropagation(); deleteAffiliate(affiliate)"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="5" (click)="clear(affiliateTable)">No affiliate found !</td>
+    </tr>
+  </ng-template>
+</p-table>
+<p-confirmDialog></p-confirmDialog>

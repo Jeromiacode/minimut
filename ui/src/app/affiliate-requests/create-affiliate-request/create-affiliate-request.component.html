@@ -1,0 +1,56 @@
+<p-toast key="createRequestSuccess"></p-toast>
+<p-toast key="createRequestError"></p-toast>
+<form class="create-request-form"
+      novalidate
+      (ngSubmit)="createRequest()"
+      [formGroup]="requestForm">
+  <div class="request-input">
+    <h2>Requests</h2>
+    <span class="p-float-label">
+      <p-autoComplete id="prestationCode" name="prestationCode"
+                      formControlName="prestationCode"
+                      placeholder="4"
+                      [suggestions]="prestationsCodes"
+                      [minLength]="3"
+                      [showEmptyMessage]="true"
+                      (completeMethod)="filterPrestationByCode($event)"
+                      (onSelect)="isDateValid()"></p-autoComplete>
+      <label for="prestationCode">Prestation code <span class="required">*</span></label>
+      <div class="error-message" *ngIf="isInvalid(this.prestationCode)">
+        <div *ngIf="prestationCode.errors?.['required']">This field is required</div>
+        <div *ngIf="prestationCode.errors?.['pattern']">Numbers only starting with 4</div>
+        <div *ngIf="prestationCode.errors?.['minlength'] || prestationCode.errors?.['maxlength']">The prestation code should be 6 digits</div>
+      </div>
+    </span>
+    <span class="p-float-label">
+      <p-autoComplete id="affiliateCode" name="affiliateCode"
+                      formControlName="affiliateCode"
+                      [suggestions]="affiliatesCodes"
+                      [minLength]="3"
+                      [showEmptyMessage]="true"
+                      (completeMethod)="filterAffiliateByCode($event)"></p-autoComplete>
+      <label for="affiliateCode">Affiliate code <span class="required">*</span></label>
+      <div class="error-message" *ngIf="isInvalid(this.affiliateCode)">
+        <div *ngIf="affiliateCode.errors?.['required']">This field is required</div>
+        <div *ngIf="affiliateCode.errors?.['pattern']">Numbers only starting with 4</div>
+        <div *ngIf="affiliateCode.errors?.['minlength'] || affiliateCode.errors?.['maxlength']">The prestation code should be 6 digits</div>
+      </div>
+    </span>
+    <span class="p-float-label">
+      <p-calendar id="date"
+                  name="date"
+                  dateFormat="dd-mm-yy"
+                  formControlName="date"
+                  (onSelect)="isDateValid()"></p-calendar>
+      <label for="date">Request date <span class="required">*</span></label>
+      <div class="error-message" *ngIf="isInvalid(this.date)">
+        <div *ngIf="date.errors?.['required']">This field is required</div>
+        <div *ngIf="date.errors?.['invalidDate']">Prestation is only availabe between {{prestationStartDate}} and {{prestationEndDate}}</div>
+      </div>
+    </span>
+    <button pButton
+            class="request-form-submit-button"
+            type="submit"
+            [disabled]="requestForm.invalid">Create new request</button>
+  </div>
+</form>

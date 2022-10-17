@@ -1,0 +1,325 @@
+/* reset css */
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* app-root */
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+.nav-header {
+  background-color: rgb(224, 46, 46);
+  height: 50px;
+  position: fixed;
+  width: 100vw;
+  z-index: 100;
+}
+
+.main {
+  display: flex;
+  flex-grow: 1;
+}
+
+.main-content {
+  max-width: calc(100vw - 175px);
+
+  h1 {
+    font-size: 1.8rem;
+    font-family: sans-serif;
+    text-align: center;
+    margin: 25px;
+  }
+}
+
+.main-sidebar {
+  background-color: rgba(224, 46, 46, 0.90);
+  width: 175px;
+  position: fixed;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+
+  p-panelmenu {
+    margin-top: 50px;
+  }
+
+  img {
+    background-color: rgba(255, 255, 255, .9);
+    max-height: 50px;
+    padding-right: 26px;
+    padding-left: 27px;
+    cursor: pointer;
+  }
+}
+
+.p-panelmenu .p-panelmenu-content {
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.p-panelmenu .p-panelmenu-header > a {
+  border-radius: 0 !important;
+  transition: none !important;
+}
+
+.p-panelmenu .p-panelmenu-header > a:focus {
+  box-shadow: none !important;
+}
+
+.p-panelmenu .p-panelmenu-panel,
+.p-panelmenu .p-panelmenu-content {
+  margin-bottom: 0 !important
+}
+
+/* app-affiliates-list & prestation */
+app-affiliates-list, app-prestations-list {
+  margin-left: calc(150px + 25px);
+  margin-top: 50px;
+  position: fixed;
+  width: calc(100vw - 175px);
+  padding: 25px 25px 0 25px;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  word-break: break-word;
+
+  .pi-icon:first-child {
+  padding-left: 1rem !important;
+  }
+  .pi-icon > button {
+    width: 2rem !important;
+  }
+}
+
+.p-datatable table {
+  width: 100% !important;
+}
+
+i.pi.true-icon {
+  color: limegreen;
+}
+
+i.pi.false-icon {
+  color: red;
+}
+
+/* app-create-affiliate & prestation */
+app-create-affiliate, app-create-prestation, app-create-request {
+  margin-left: calc(150px + 25px);
+  margin-top: 15px;
+  position: absolute;
+}
+
+.create-affiliate-form, .create-prestation-form, .create-request-form {
+  display: flex;
+  margin-top: 35px;
+  margin-left: 15px;
+  gap: 15px;
+}
+
+.affiliate-input, .prestation-input, .request-input {
+  .p-float-label {
+    display: flex !important;
+    margin: 25px -50px 25px 35px;
+  }
+
+  .required {
+    color: red;
+    font-weight: 700;
+  }
+
+  h2 {
+    color: red;
+    font-weight: 700;
+    margin: 25px 0 0 35px;
+    text-transform: uppercase;
+    font-family: sans-serif;
+    font-size: 0.8rem;
+  }
+
+  button {
+    margin-left: 35px;
+  }
+}
+
+.address-input {
+  .p-float-label {
+    margin: 25px 0 25px 0;
+  }
+
+  .required {
+    color: red;
+    font-weight: 700;
+  }
+
+  h2 {
+    color: red;
+    font-weight: 700;
+    margin-top: 25px;
+    text-transform: uppercase;
+    font-family: sans-serif;
+    font-size: 0.8rem;
+  }
+}
+
+.error-message {
+  align-self: center;
+  margin-left: 5px;
+  color: #e24c4c;
+}
+
+.affiliate-form-submit-button, .prestation-form-submit-button,  .request-form-submit-button  {
+  background: red !important;
+  border: none !important;
+}
+
+.p-component:disabled {
+  background-color: lightgrey !important;
+}
+
+.p-button {
+  border: none !important;
+  background: red !important;
+  color: white !important;
+  &:disabled {
+    background-color: grey !important;
+  }
+}
+
+.p-button.p-button-icon-only {
+  background: none !important;
+  margin-bottom: -15px;
+
+  span.p-button-icon.pi.pi-times {
+    color: red;
+  }
+  span.p-button-icon.pi.pi-pencil {
+    color: black;
+  }
+}
+
+.p-button.p-button-icon-only:enabled:hover {
+  background: none !important;
+}
+
+.p-button:enabled:hover {
+  background: firebrick !important;
+}
+
+/* app-affiliate-details */
+app-affiliate-details {
+  padding: 25px;
+  margin-left: calc(150px + 25px);
+  margin-top: 50px;
+  position: absolute;
+
+  .affiliate-details {
+    display: flex;
+    margin: 25px;
+  }
+
+  .affiliate-details-header {
+    font-weight: 600;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    span {
+      min-height: 1rem;
+    }
+  }
+
+  .affiliate-details-body {
+    margin-left: 50px;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    span {
+      min-height: 1rem;
+    }
+  }
+}
+
+/* app-update-affiliate */
+app-update-affiliate {
+  padding: 25px 25px 0 25px;
+  margin-left: 150px;
+  position: absolute;
+
+.affiliate-input {
+    margin-right: -25px;
+  }
+
+  .address-input {
+    margin-left: 15px;
+  }
+}
+
+button.back-to-list-button {
+  position: absolute;
+  bottom: 0;
+  margin-left: -50px;
+}
+
+.p-float-label:has(.p-dropdown) {
+  width: 275px;
+}

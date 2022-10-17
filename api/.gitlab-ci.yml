@@ -1,0 +1,164 @@
+default:
+  tags:
+    - openjdk17
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        IMAGE_TAG: echo $$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME | cut -d'-' -f 2
+    - if: '$CI_COMMIT_TAG'
+      variables:
+        IMAGE_TAG: echo $$CI_COMMIT_TAG | cut -d'-' -f 2
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      variables:
+        IMAGE_TAG: echo latest
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+      when: never
+
+stages:
+  - init
+  - build
+  - test
+  - publish
+  - deploy
+
+cache:
+  key: gradle-cache-key
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+  policy: pull
+
+init:
+  stage: init
+  script:
+    - ./gradlew assemble -PgitlabAuthMode=Job-Token -PgitlabAuthToken=$CI_JOB_TOKEN
+  only:
+    changes:
+      - build.gradle
+      - gradle.properties
+  cache:
+    key: gradle-cache-key
+    paths:
+      - .gradle/wrapper
+      - .gradle/caches
+    policy: push
+
+build:
+  stage: build
+  script:
+    - ./gradlew assemble -PgitlabAuthMode=Job-Token -PgitlabAuthToken=$CI_JOB_TOKEN
+  artifacts:
+    paths:
+      - build/
+  rules:
+    - when: always
+
+generate-sdk:
+  stage: build
+  script:
+    - ./gradlew generateOpenApiDocs -PgitlabAuthMode=Job-Token -PgitlabAuthToken=$CI_JOB_TOKEN
+    - ./gradlew buildJavaSdk -PgitlabAuthMode=Job-Token -PgitlabAuthToken=$CI_JOB_TOKEN -Pversion=$CI_COMMIT_TAG
+    - ./gradlew buildAngularSdk -PgitlabAuthMode=Job-Token -PgitlabAuthToken=$CI_JOB_TOKEN -Pversion=$CI_COMMIT_TAG
+  needs: ["build"]
+  artifacts:
+    paths:
+      - build/
+
+test:
+  stage: test
+  script:
+    - ./gradlew check -PgitlabAuthMode=Job-Token -PgitlabAuthToken=$CI_JOB_TOKEN
+#    - cat build/reports/jacoco/test/html/index.html
+  artifacts:
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
+#    paths:
+#      - build/reports/jacoco/test/**
+
+sonarqube-check:
+  stage: test
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: ./gradlew sonarqube -Dsonar.login=$SONAR_TOKEN
+  allow_failure: true
+  only:
+    - $CI_DEFAULT_BRANCH # or the name of your main branch
+
+
+docker:
+  stage: publish
+  tags:
+    - kaniko
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [ "" ]
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$(eval $IMAGE_TAG)
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: on_success
+    - if: $CI_COMMIT_TAG
+      when: on_success
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: true
+
+publish-java-sdk:
+  stage: publish
+  tags:
+    - maven
+  script:
+    - mvn -s ci-settings.xml -f build/sdk/java/pom.xml deploy
+  needs: [ "generate-sdk" ]
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: on_success
+
+
+publish-angular-sdk:
+  stage: publish
+  tags:
+    - nodejs
+  script:
+    - cd build/sdk/angular
+    - npm install
+    - npm run build
+    - npm publish dist
+  needs: ["generate-sdk"]
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: on_success
+
+.deploy:
+  image:
+    name: curlimages/curl
+    entrypoint: [ "" ]
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - curl -X POST $WEBHOOK
+
+deploy_ci:
+  extends: .deploy
+  environment:
+    name: CI
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: on_success
+
+deploy_uat:
+  extends: .deploy
+  environment:
+    name: UAT
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: on_success

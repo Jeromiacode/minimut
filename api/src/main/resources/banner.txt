@@ -1,0 +1,10 @@
+Version : ${info.application.version}
+Build : ${info.application.buildinfo}
+Revision: ${info.application.revision}
+
+
+
+
+
+
+

@@ -1,0 +1,48 @@
+<div class="affiliate-details" *ngIf="affiliate">
+  <div class="affiliate-details-header">
+    <span *ngIf="affiliate.code">Code number</span>
+    <span *ngIf="affiliate.nationalNumber">National number</span>
+    <span *ngIf="affiliate.firstName">First name</span>
+    <span *ngIf="affiliate.lastName">Last name</span>
+    <span *ngIf="affiliate.email">Email</span>
+    <span *ngIf="affiliate.phoneNumber">Phone number</span>
+    <span *ngIf="affiliate.gender">Gender</span>
+    <span *ngIf="affiliate.birthdate">Birthdate</span>
+  </div>
+  <div class="affiliate-details-body">
+    <span>{{affiliate.code}}</span>
+    <span>{{affiliate.nationalNumber}}</span>
+    <span>{{affiliate.firstName}}</span>
+    <span>{{affiliate.lastName}}</span>
+    <span>{{affiliate.email}}</span>
+    <span>{{affiliate.phoneNumber}}</span>
+    <span>{{affiliate.gender.toLowerCase()}}</span>
+    <span>{{affiliate.birthdate}}</span>
+  </div>
+</div>
+<div class="affiliate-details-table" *ngIf="affiliate && affiliate.addresses">
+  <p-table [value]="affiliate.addresses">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Street</th>
+        <th>Street n°</th>
+        <th>Postal code</th>
+        <th>City</th>
+        <th>Date of settlement</th>
+        <th>Primary</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-address>
+      <tr>
+        <td>{{address.street}}</td>
+        <td>{{address.streetNumber}}</td>
+        <td>{{address.postalCode}}</td>
+        <td>{{address.city}}</td>
+        <td>{{address.moveInDate}}</td>
+        <td>
+          <i class="pi" [ngClass]="{'true-icon pi-check-circle': address.isMain, 'false-icon pi-times-circle': !address.isMain}"></i>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

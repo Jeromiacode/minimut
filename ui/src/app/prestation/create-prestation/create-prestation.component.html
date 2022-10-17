@@ -1,0 +1,79 @@
+<form class="create-prestation-form"
+      novalidate
+      [formGroup]="prestationForm"
+      (ngSubmit)="addPrestation(); prestationForm.reset()">
+  <div class="prestation-input">
+    <h2>Prestation</h2>
+    <span class="p-float-label">
+      <input pInputText id="code" type="text" name="code" formControlName="code">
+      <label for="code">Prestation code <span class="required">*</span></label>
+       <div class="error-message" *ngIf="prestationForm.controls['code'].invalid && (prestationForm.controls['code'].dirty || prestationForm.controls['code'].touched)">
+         <div *ngIf="prestationForm.controls['code'].errors?.['required']">
+            The prestation code is required
+         </div>
+         <div *ngIf="prestationForm.controls['code'].errors?.['pattern']">
+            The prestation code should be only numbers and starting with 4
+         </div>
+         <div *ngIf="prestationForm.controls['code'].errors?.['maxlength'] || prestationForm.controls['code'].errors?.['minlength']">
+            The prestation code should be 6 digits
+         </div>
+       </div>
+    </span>
+    <span class="p-float-label">
+      <textarea pInputText id="description" type="area" name="description" formControlName="description"></textarea>
+      <label for="description">Description <span class="required">*</span></label>
+       <div class="error-message" *ngIf="prestationForm.controls['description'].invalid && (prestationForm.controls['description'].dirty || prestationForm.controls['description'].touched)">
+         <div *ngIf="prestationForm.controls['description'].errors?.['required']">
+            A description is required
+         </div>
+       </div>
+    </span>
+    <span class="p-float-label">
+      <p-calendar id="startDate" name="startDate" dateFormat="dd-mm-yy" formControlName="startDate"></p-calendar>
+      <label for="startDate">Starting date <span class="required">*</span></label>
+       <div class="error-message" *ngIf="prestationForm.controls['startDate'].invalid && (prestationForm.controls['startDate'].dirty || prestationForm.controls['startDate'].touched)">
+         <div *ngIf="prestationForm.controls['startDate'].errors?.['required']">
+            A start date is required
+         </div>
+        <div [hidden]="!prestationForm.errors?.['invalidDate']">
+            The starting date cannot be after the ending date
+        </div>
+       </div>
+    </span>
+    <span class="p-float-label">
+      <p-calendar id="endDate" name="endDate" dateFormat="dd-mm-yy" formControlName="endDate"></p-calendar>
+      <label for="endDate">Ending date <span class="required">*</span></label>
+       <div class="error-message" *ngIf="prestationForm.controls['endDate'].invalid && (prestationForm.controls['endDate'].dirty || prestationForm.controls['endDate'].touched)">
+         <div *ngIf="prestationForm.controls['endDate'].errors?.['required']">
+            A end date is required
+         </div>
+         <div [hidden]="!prestationForm.controls['endDate'].errors?.['invalidDate']">
+            The ending date cannot be before the starting date
+        </div>
+       </div>
+    </span>
+    <span class="p-float-label">
+      <input pInputText id="price" type="text" name="price" formControlName="price">
+      <label for="price">Price <span class="required">*</span></label>
+       <div class="error-message" *ngIf="prestationForm.controls['price'].invalid && (prestationForm.controls['price'].dirty || prestationForm.controls['price'].touched)">
+         <div *ngIf="prestationForm.controls['price'].errors?.['required']">
+            The price is required
+         </div>
+         <div *ngIf="prestationForm.controls['price'].errors?.['pattern']">
+            The prestation code should be only numbers
+         </div>
+       </div>
+    </span>
+    <span class="p-float-label">
+      <p-dropdown id="category"
+                  name="category"
+                  optionLabel="name"
+                  formControlName="category"
+                  [options]="categories"></p-dropdown>
+    </span>
+    <button pButton
+            class="prestation-form-submit-button"
+            type="submit"
+            [disabled]="prestationForm.invalid">Add prestation</button>
+  </div>
+</form>

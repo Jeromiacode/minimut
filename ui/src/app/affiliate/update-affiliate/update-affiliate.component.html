@@ -1,0 +1,68 @@
+<p-toast key="updateSuccess"></p-toast>
+<p-toast key="updateError"></p-toast>
+<form class="create-affiliate-form" (ngSubmit)="updateAffiliate()">
+  <div class="affiliate-input">
+    <h2>Affiliate</h2>
+    <span class="p-float-label">
+      <input pInputText id="code" type="text" name="code" [(ngModel)]="code" [disabled]="true">
+      <label for="code">Code number <span class="required">*</span></label>
+    </span>
+    <span class="p-float-label">
+      <input pInputText id="nationalNumber" type="text" name="nationalNumber" [(ngModel)]="nationalNumber" [disabled]="true">
+      <label for="nationalNumber">National number <span class="required">*</span></label>
+    </span>
+    <span class="p-float-label">
+      <input pInputText id="firstName" type="text" name="firstName" [(ngModel)]="firstName">
+      <label for="firstName">First name <span class="required">*</span></label>
+    </span>
+    <span class="p-float-label">
+      <input pInputText id="lastName" type="text" name="lastName" [(ngModel)]="lastName">
+      <label for="lastName">Last name <span class="required">*</span></label>
+    </span>
+    <span class="p-float-label">
+      <input id="email" pInputText type="text" name="email" [(ngModel)]="email"
+             pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$">
+      <label for="email">Email <span class="required">*</span></label>
+    </span>
+    <span class="p-float-label">
+      <p-inputMask id="phoneNumber" mask="+99 999-999999" name="phoneNumber" [(ngModel)]="phoneNumber"></p-inputMask>
+      <label for="phoneNumber">Phone number <span class="required">*</span></label>
+    </span>
+    <span class="p-float-label">
+      <p-calendar id="birthdate" name="birthdate" [(ngModel)]="birthdate" dateFormat="dd-mm-yy"></p-calendar>
+      <label for="birthdate">Birthdate </label>
+    </span>
+    <span class="p-float-label">
+        <p-dropdown id="gender" name="gender" [options]="genders" [(ngModel)]="selectedGender"
+                    optionLabel="name"></p-dropdown>
+    </span>
+    <button pButton class="affiliate-form-submit-button" type="submit" [disabled]="isFormUnchanged()">Update affiliate</button>
+  </div>
+  <div class="address-input">
+    <h2>Address</h2>
+    <span class="p-float-label">
+      <input pInputText type="text" id="street" name="street" [(ngModel)]="street">
+      <label for="street">Street <span class="required">*</span></label>
+    </span>
+    <span class="p-float-label">
+      <input pInputText type="text" id="streetNumber" name="streetNumber" [(ngModel)]="streetNumber">
+      <label for="streetNumber">Street number <span class="required">*</span></label>
+    </span>
+    <span class="p-float-label">
+      <input pInputText type="text" id="postalCode" name="postalCode" [(ngModel)]="postalCode">
+      <label for="postalCode">Postal code <span class="required">*</span></label>
+    </span>
+    <span class="p-float-label">
+      <input pInputText type="text" id="city" name="city" [(ngModel)]="city">
+      <label for="city">City <span class="required">*</span></label>
+    </span>
+    <span class="p-float-label">
+      <p-calendar id="moveInDate" name="moveInDate" [(ngModel)]="moveInDate" dateFormat="dd-mm-yy"></p-calendar>
+      <label for="moveInDate">Date of settlement <span class="required">*</span></label>
+    </span>
+    <button pButton class="back-to-list-button" type="button" (click)="navigateToList()">Back to the list</button>
+  </div>
+</form>
+
+
+

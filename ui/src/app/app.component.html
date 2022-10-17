@@ -1,0 +1,13 @@
+<nav class="nav-header"></nav>
+<main class="main">
+  <div class="main-sidebar">
+    <img
+      [routerLink]="['/affiliates/list']"
+      alt="solidaris logo"
+      src="assets/Logo_Solidaris_Brabant_2022_RGB.png">
+    <p-panelMenu class="main-sidebar panel-menu" [model]="mainSidebar" [style]="{'border-radius':'none !important'}"></p-panelMenu>
+  </div>
+  <div class="main-content">
+  <router-outlet></router-outlet>
+  </div>
+</main>
